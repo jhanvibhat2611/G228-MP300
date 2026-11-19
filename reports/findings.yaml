@@ -22,8 +22,8 @@ data_issues:
     value: null            # the special number typed instead of a blank
     count: null            # how many rows have it
   duplicate_rows:
-    present: null
-    count: null            # number of EXTRA copies (rows you would delete)
+    present: true
+    count: 25           # number of EXTRA copies (rows you would delete)
   stuck_sensor:
     present: null
     column: null
