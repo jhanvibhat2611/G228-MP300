@@ -11,16 +11,16 @@ data_issues:
   leaking_column:
     present: true
     column: gb_from_monthly_bill           # the column that must not be used as a feature
-  unit_mixup:
-    present: null
-    column: null           # the column recorded in a different unit
-    group_value: null      # the value of circle whose rows are affected
-    factor: null           # wrong value = right value x factor
-  sentinel_value:
-    present: null
+    unit_mixup:
+    present: true
+    column: screen_hours
+    group_value: Semi-urban
+    factor: 60          # wrong value = right value x factor
+    sentinel_value:
+    present: false
     column: null
-    value: null            # the special number typed instead of a blank
-    count: null            # how many rows have it
+    value: null
+    count: null           # how many rows have it
   duplicate_rows:
     present: true
     count: 25           # number of EXTRA copies (rows you would delete)
