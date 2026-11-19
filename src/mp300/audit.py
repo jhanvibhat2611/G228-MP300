@@ -28,3 +28,27 @@ later = pd.read_csv("data/raw/later.csv")
 for name, data in [("train.csv", train), ("later.csv", later)]:
     print(f"\nscreen_hours by circle in {name}:")
     print(data.groupby("circle")["screen_hours"].agg(["min", "mean", "max"]).round(2))
+
+for column in ["phone_tier", "circle"]:
+    print(f"\nCategory spellings for {column}:")
+    for name, data in [("train.csv", train), ("later.csv", later)]:
+        counts = data[column].value_counts()
+        print(name, {repr(value): count for value, count in counts.items()})
+
+print("\nTop 40 gb_per_day values:")
+print(train["gb_per_day"].nlargest(40).to_list())
+
+print("\nTarget typo rows:", int(train["gb_per_day"].gt(10).sum()))
+
+print("\nLongest constant stretch per numeric column:")
+for column in train.select_dtypes(include="number").columns:
+    daily = train.groupby("date", sort=True)[column].agg(["min", "max"])
+    constant = daily["min"].where(daily["min"].eq(daily["max"]))
+    run_ids = constant.ne(constant.shift()).cumsum()
+
+    runs = constant.dropna().groupby(run_ids)
+    longest = max((run for _, run in runs), key=len, default=None)
+
+    if longest is not None:
+        print(column, longest.index[0], longest.index[-1],
+              f"{len(longest)} recorded days", f"value={longest.iloc[0]}")

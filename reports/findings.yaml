@@ -24,18 +24,18 @@ data_issues:
   duplicate_rows:
     present: true
     count: 25           # number of EXTRA copies (rows you would delete)
-  stuck_sensor:
-    present: null
+    stuck_sensor:
+    present: false
     column: null
-    start_date: null       # first date with the stuck value, YYYY-MM-DD
-    end_date: null         # last date with the stuck value, YYYY-MM-DD
-  target_typos:
-    present: null
-    count: null            # rows whose target was typed 10 times too big
-  spelling_variants:
-    present: null
-    column: null
-    true_levels: null      # how many real categories there are after cleaning
+    start_date: null
+    end_date: null        # last date with the stuck value, YYYY-MM-DD
+    target_typos:
+    present: true
+    count: 13           # rows whose target was typed 10 times too big
+    spelling_variants:
+    present: true
+    column: phone_tier
+    true_levels: 3      # how many real categories there are after cleaning
 
 tracking:
   experiment_name: null
