@@ -9,8 +9,8 @@ data_issues:
   # For each of the 7 kinds: present: true or false.
   # If present is false, leave the other values as null.
   leaking_column:
-    present: null
-    column: null           # the column that must not be used as a feature
+    present: true
+    column: gb_from_monthly_bill           # the column that must not be used as a feature
   unit_mixup:
     present: null
     column: null           # the column recorded in a different unit
