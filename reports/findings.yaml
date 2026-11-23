@@ -11,12 +11,13 @@ data_issues:
   leaking_column:
     present: true
     column: gb_from_monthly_bill           # the column that must not be used as a feature
-    unit_mixup:
+  unit_mixup:
     present: true
     column: screen_hours
     group_value: Semi-urban
     factor: 60          # wrong value = right value x factor
-    sentinel_value:
+  # No sentinel candidates or unexplained impossible repeated values found.
+  sentinel_value:
     present: false
     column: null
     value: null
@@ -24,15 +25,16 @@ data_issues:
   duplicate_rows:
     present: true
     count: 25           # number of EXTRA copies (rows you would delete)
-    stuck_sensor:
+  # Longest all-rows-constant run is one day in every numeric column.
+  stuck_sensor:
     present: false
     column: null
     start_date: null
     end_date: null        # last date with the stuck value, YYYY-MM-DD
-    target_typos:
+  target_typos:
     present: true
     count: 13           # rows whose target was typed 10 times too big
-    spelling_variants:
+  spelling_variants:
     present: true
     column: phone_tier
     true_levels: 3      # how many real categories there are after cleaning
