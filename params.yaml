@@ -1,0 +1,5 @@
+model:
+  path: models/model.joblib
+
+prediction:
+  max_plan_gb_limit: 8
