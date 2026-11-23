@@ -1,6 +1,8 @@
 """Exercise the API with a temporary joblib artifact and no raw CSVs."""
 
+import io
 import json
+from contextlib import redirect_stdout
 
 import joblib
 import pytest
@@ -31,12 +33,18 @@ class SamplePredictor:
 
 
 @pytest.fixture
-def client(tmp_path, monkeypatch):
-    monkeypatch.setattr(main, "MODEL_PATH", tmp_path / "model.joblib")
+def model_path(tmp_path, monkeypatch):
+    path = tmp_path / "model.joblib"
+    monkeypatch.setattr(main, "MODEL_PATH", path)
     main.load_model.cache_clear()
+    yield path
+    main.load_model.cache_clear()
+
+
+@pytest.fixture
+def client(model_path):
     with TestClient(main.app) as test_client:
         yield test_client
-    main.load_model.cache_clear()
 
 
 def test_health_without_model(client):
@@ -46,13 +54,15 @@ def test_health_without_model(client):
     assert response.json() == {"status": "ok"}
 
 
-def test_predict_at_valid_boundaries(client, capsys):
-    joblib.dump(SamplePredictor(), main.MODEL_PATH)
-    response = client.post("/predict", json=PAYLOAD)
+def test_predict_at_valid_boundaries(model_path):
+    joblib.dump(SamplePredictor(), model_path)
+    stdout = io.StringIO()
+    with redirect_stdout(stdout), TestClient(main.app) as client:
+        response = client.post("/predict", json=PAYLOAD)
 
     assert response.status_code == 200
     assert response.json() == {"prediction": 2.75}
-    log = json.loads(capsys.readouterr().out)
+    log = json.loads(stdout.getvalue())
     assert log.keys() == {"event", "status", "latency_ms"}
     assert log["event"] == "prediction"
     assert log["status"] == "ok"
@@ -87,11 +97,11 @@ def test_predict_requires_all_fields(client):
     assert error["type"] == "missing"
 
 
-def test_predict_recovers_when_model_is_added(client):
+def test_predict_recovers_when_model_is_added(client, model_path):
     response = client.post("/predict", json=PAYLOAD)
 
     assert response.status_code == 503
     assert response.json() == {"detail": "Prediction model is unavailable"}
 
-    joblib.dump(SamplePredictor(), main.MODEL_PATH)
+    joblib.dump(SamplePredictor(), model_path)
     assert client.post("/predict", json=PAYLOAD).json() == {"prediction": 2.75}
