@@ -1,8 +1,9 @@
-"""Exercise the API with a temporary joblib artifact and no raw CSVs."""
+"""Exercise the API and any supplied production artifact without raw CSVs."""
 
 import io
 import json
 from contextlib import redirect_stdout
+from math import isfinite
 
 import joblib
 import pytest
@@ -105,3 +106,16 @@ def test_predict_recovers_when_model_is_added(client, model_path):
 
     joblib.dump(SamplePredictor(), model_path)
     assert client.post("/predict", json=PAYLOAD).json() == {"prediction": 2.75}
+
+
+@pytest.mark.skipif(not main.MODEL_PATH.is_file(), reason="models/model.joblib is unavailable")
+def test_predict_with_saved_pipeline():
+    main.load_model.cache_clear()
+    try:
+        with TestClient(main.app) as client:
+            response = client.post("/predict", json=PAYLOAD)
+
+        assert response.status_code == 200, response.text
+        assert isfinite(response.json()["prediction"])
+    finally:
+        main.load_model.cache_clear()

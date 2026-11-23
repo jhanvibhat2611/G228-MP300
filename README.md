@@ -39,8 +39,9 @@ python src/mp300/audit.py
 
 ## Run and check the prediction API
 
-With the project dependencies installed, put the trained pipeline at
-`models/model.joblib` and run the following from the repository root.
+Put Hardik's champion pipeline from [training PR #2](https://github.com/jhanvibhat2611/G228-MP300/pull/2)
+at `models/model.joblib`. The artifact was trained with scikit-learn `1.7.2`.
+With the project dependencies installed, run the following from the repository root.
 
 ```bash
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -62,8 +63,8 @@ HTTP 200 with `{"status":"ok"}`. Use the following body for `POST /predict`.
 }
 ```
 
-Junaid's saved pipeline returned HTTP 200 with
-`{"prediction":6.263399930617355}` for this request. The prediction is in GB per
+Hardik's champion v2 returned HTTP 200 with
+`{"prediction":7.0190480190430495}` for this request. The prediction is in GB per
 day and depends on the deployed model. Changing `plan_gb_limit` to `8.01` or
 `video_minutes` to `-1` returns HTTP 422 and identifies the invalid field. A
 missing model returns HTTP 503 from `/predict`.
@@ -75,5 +76,6 @@ first valid prediction and the process reuses it. `clean_train` is reserved for
 raw training data. Successful predictions log the event, status and latency as
 JSON to stdout, with customer inputs excluded.
 
-Run `python -m pytest -q` for the test suite. The API tests use a temporary
-joblib artifact and run without the raw CSVs.
+Run `python -m pytest -q` for the test suite. The API unit tests use temporary
+artifacts. When `models/model.joblib` is present, pytest also sends a prediction
+request through the saved pipeline. Both checks run without raw CSVs.
