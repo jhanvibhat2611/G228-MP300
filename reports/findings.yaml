@@ -46,19 +46,19 @@ tracking:
   champion_version: 2
 
 monitoring:
-  psi:                     # cleaned train.csv vs later.csv, 10 bins
-    age: 0.0318399819
-    screen_hours: 0.0235447847
-    apps_installed: 0.0291133091
-    plan_gb_limit: 2.4249936091
-    video_minutes: 0.0329912455
-    wifi_hours: 0.0238390079
+  psi:  # cleaned train.csv vs later.csv, up to 10 train quantile bins
+    age: 0.02014478096060273
+    screen_hours: 0.028974002024107843
+    apps_installed: 0.030974680627314188
+    plan_gb_limit: 2.2594929552838026
+    video_minutes: 0.028683420540921684
+    wifi_hours: 0.028086037826865275
   most_drifted_feature: plan_gb_limit
-  mae_by_group:            # v1 on later.csv, per value of circle
-    'Urban': 0.619473
-    'Semi-urban': 0.599534
-    'Rural': 2.081179
+  mae_by_group:  # registered v1 on all later.csv rows
+    'Urban': 0.34590717431835977
+    'Semi-urban': 0.3133281695440838
+    'Rural': 1.7645662187227251
   worst_served_group: Rural
-  mae_v1_on_check: 1.058176    # v1 on the last 30% of later.csv (by date)
-  mae_v2_on_check: 0.461231    # v2 on the same rows
-  decision: promote            # v2 is more than 12% better
+  mae_v1_on_check: 0.7742215992018804  # shared last 30%
+  mae_v2_on_check: 0.5727945150379006  # shared last 30%
+  decision: promote
