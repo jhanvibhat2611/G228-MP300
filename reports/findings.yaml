@@ -47,18 +47,18 @@ tracking:
 
 monitoring:
   psi:                     # cleaned train.csv vs later.csv, 10 bins
-    age: null
-    screen_hours: null
-    apps_installed: null
-    plan_gb_limit: null
-    video_minutes: null
-    wifi_hours: null
-  most_drifted_feature: null
+    age: 0.0318399819
+    screen_hours: 0.0235447847
+    apps_installed: 0.0291133091
+    plan_gb_limit: 2.4249936091
+    video_minutes: 0.0329912455
+    wifi_hours: 0.0238390079
+  most_drifted_feature: plan_gb_limit
   mae_by_group:            # v1 on later.csv, per value of circle
-    'Urban': null
-    'Semi-urban': null
-    'Rural': null
-  worst_served_group: null
-  mae_v1_on_check: null    # v1 on the last 30% of later.csv (by date)
-  mae_v2_on_check: null    # v2 on the same rows
-  decision: null           # promote or keep
+    'Urban': 0.619473
+    'Semi-urban': 0.599534
+    'Rural': 2.081179
+  worst_served_group: Rural
+  mae_v1_on_check: 1.058176    # v1 on the last 30% of later.csv (by date)
+  mae_v2_on_check: 0.461231    # v2 on the same rows
+  decision: promote            # v2 is more than 12% better
